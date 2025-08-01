@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: inventory-management
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn inventory_project.wsgi:application --log-file -
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: inventory_project.settings
+      - key: SECRET_KEY
+        value: your-secret-key-here
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: inventory-management.onrender.com
+      - key: DATABASE_URL
+        value: your-database-url-here  # e.g. from Render PostgreSQL
+
